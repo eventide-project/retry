@@ -4,10 +4,9 @@ context "Retry" do
   context "Specific Error" do
     context "Single Error" do
       context "Not raised" do
-        success = Retry.(ErrorA) { }
+        Retry.(ErrorA) { }
 
-        test "Indicates success" do
-          assert(success)
+        test "Action is not retried" do
         end
       end
 
