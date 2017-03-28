@@ -7,4 +7,7 @@ require_relative '../init.rb'
 
 require 'test_bench'; TestBench.activate
 
+require 'retry/controls'
+include Retry::Controls
+
 require 'pp'
