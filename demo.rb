@@ -1,6 +1,13 @@
 require_relative 'init'
 require 'test_bench'; TestBench.activate
 
+context "Retries" do
+
+end
+
+
+# - - -
+
 context "Returns true when nothing is raised" do
   success = Try.() { puts "Doesn't raise" }
   assert(success)

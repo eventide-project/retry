@@ -1,18 +1,32 @@
 module Retry
-  def self.call(*errors, &action)
-    success = false
+  def self.call(intervals=nil, *errors, &action)
+    intervals ||= [0]
+    intervals = intervals.to_enum
 
-    begin
-      action.call
-      success = true
-    rescue Exception => e
-      unless errors.empty?
-        unless errors.include? e.class
-          raise e
-        end
+    retries = 0
+
+    error = nil
+    probe = proc { |e| error = e }
+
+    loop do
+      success = Try.(*errors, error_probe: probe) do
+        action.call(retries)
       end
+
+      break if success
+
+      retries += 1
+
+      interval = intervals.next
+      break if interval.nil?
+
+      sleep interval
     end
 
-    success
+    unless error.nil?
+      raise error
+    end
+
+    return retries
   end
 end
