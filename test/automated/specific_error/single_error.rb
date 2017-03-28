@@ -1,29 +1,50 @@
 require_relative '../automated_init'
 
-context "Retry" do
-  context "Specific Error" do
-    context "Single Error" do
-      context "Not raised" do
-        Retry.(ErrorA) { }
+context "Specific Error" do
+  context "Single Error" do
+    context "Not raised" do
+      retries = Retry.(ErrorA) { }
 
-        test "Action is not retried" do
-        end
+      test "Action is not retried" do
+        assert(retries == 0)
+      end
+    end
+
+    context "Specific Error Raised" do
+      retries = Retry.(ErrorA) do |i|
+        raise ErrorA if i == 0
       end
 
-      context "Specific Error Raised" do
-        success = Retry.(ErrorA) { raise ErrorA }
-
-        test "Indicates failure" do
-          refute(success)
-        end
+      test "Action is retried" do
+        assert(retries == 1)
       end
+    end
 
-      context "Other Error Raised" do
-        test "Error is re-raised" do
-          assert proc { Retry.(ErrorA) { raise RuntimeError } } do
-            raises_error? RuntimeError
+    context "Other Error Raised" do
+      test "Error is re-raised" do
+        test_action = proc do
+          Retry.(ErrorA) do |i|
+            raise RuntimeError if i == 0
           end
         end
+
+        assert test_action do
+          raises_error? RuntimeError
+        end
+      end
+
+      test "Action is not retried" do
+        count = 0
+
+        begin
+          Retry.(ErrorA) do |i|
+            count += 1
+            raise RuntimeError if i == 0
+          end
+        rescue
+        end
+
+        assert(count == 1)
       end
     end
   end

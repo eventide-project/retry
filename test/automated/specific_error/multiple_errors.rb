@@ -1,30 +1,52 @@
 require_relative '../automated_init'
 
-context "Retry" do
-  context "Specific Error" do
-    context "Multiple Errors" do
-      context "Not raised" do
-        success = Retry.(ErrorA, ErrorB) { }
+context "Specific Error" do
+  context "Multiple Errors" do
+    context "Not raised" do
+      retries = Retry.(ErrorA, ErrorB) { }
 
-        test "Indicates success" do
-          assert(success)
+      test "Action is not retried" do
+        assert(retries == 0)
+      end
+    end
+
+    [ErrorA, ErrorB].each do |error_class|
+      context "Specific Error Raised (#{error_class.name.split('::').last})" do
+        retries = Retry.(ErrorA, ErrorB) do |i|
+          raise error_class if i == 0
+        end
+
+        test "Action is retried" do
+          assert(retries == 1)
         end
       end
+    end
 
-      context "Specific Error Raised" do
-        success = Retry.(ErrorA, ErrorB) { raise ErrorA }
-
-        test "Indicates failure" do
-          refute(success)
-        end
-      end
-
-      context "Other Error Raised" do
-        test "Error is re-raised" do
-          assert proc { Retry.(ErrorA, ErrorB) { raise RuntimeError } } do
-            raises_error? RuntimeError
+    context "Other Error Raised" do
+      test "Error is re-raised" do
+        test_action = proc do
+          Retry.(ErrorA, ErrorB) do |i|
+            raise RuntimeError if i == 0
           end
         end
+
+        assert test_action do
+          raises_error? RuntimeError
+        end
+      end
+
+      test "Action is not retried" do
+        count = 0
+
+        begin
+          Retry.(ErrorA, ErrorB) do |i|
+            count += 1
+            raise RuntimeError if i == 0
+          end
+        rescue
+        end
+
+        assert(count == 1)
       end
     end
   end

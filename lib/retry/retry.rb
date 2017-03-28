@@ -1,5 +1,5 @@
 module Retry
-  def self.call(intervals=nil, *errors, &action)
+  def self.call(*errors, intervals: nil, &action)
     intervals ||= [0]
     intervals = intervals.to_enum
 
