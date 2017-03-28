@@ -1,4 +1,4 @@
-module Retry
+class Retry
   module Controls
     module Time
       module Elapsed
