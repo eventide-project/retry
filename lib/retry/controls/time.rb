@@ -9,7 +9,7 @@ module Retry
           action.call
 
           t2 = ::Time.now
-          t2 - t1
+          (t2 - t1) * 1000
         end
       end
     end

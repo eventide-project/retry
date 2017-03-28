@@ -26,10 +26,10 @@ context "Intervals" do
         end
       end
 
-      tolerance = 0.001
+      tolerance_milliseconds = 1
 
       test "Does not delay" do
-        assert(elapsed < tolerance)
+        assert(elapsed < tolerance_milliseconds)
       end
     end
   end

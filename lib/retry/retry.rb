@@ -1,7 +1,7 @@
 module Retry
-  def self.call(*errors, intervals: nil, &action)
-    intervals ||= [0]
-    intervals = intervals.to_enum
+  def self.call(*errors, millisecond_intervals: nil, &action)
+    millisecond_intervals ||= [0]
+    millisecond_intervals = millisecond_intervals.to_enum
 
     retries = 0
 
@@ -17,10 +17,10 @@ module Retry
 
       retries += 1
 
-      interval = intervals.next
+      interval = millisecond_intervals.next
       break if interval.nil?
 
-      sleep interval
+      sleep (interval/1000.0)
     end
 
     unless error.nil?
