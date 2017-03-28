@@ -1,4 +1,4 @@
-module Retry
+class Retry
   module Controls
     ErrorA = Try::Controls::ErrorA
     ErrorB = Try::Controls::ErrorB

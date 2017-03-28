@@ -1,4 +1,4 @@
 require 'try'
-require 'initializer'
+require 'initializer'; Initializer.activate
 
 require 'retry/retry'
