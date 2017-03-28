@@ -1,4 +1,12 @@
-module Retry
+class Retry
+
+  def initialize
+  end
+
+  def self.build(*errors, millisecond_intervals: nil)
+
+  end
+
   def self.call(*errors, millisecond_intervals: nil, &action)
     millisecond_intervals ||= [0]
     millisecond_intervals = millisecond_intervals.to_enum
