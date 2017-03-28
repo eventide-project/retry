@@ -6,6 +6,15 @@ class Retry
   end
   attr_writer :millisecond_intervals
 
+  def action_executed(&action)
+    unless action.nil?
+      self.action_executed = action
+    end
+
+    @action_executed
+  end
+  attr_writer :action_executed
+
   def self.build(*errors, millisecond_intervals: nil)
     instance = new(errors)
     instance.millisecond_intervals = millisecond_intervals&.to_enum
@@ -27,6 +36,8 @@ class Retry
       success = Try.(*errors, error_probe: probe) do
         action.call(retries)
       end
+
+      action_executed&.call(retries)
 
       break if success
 
