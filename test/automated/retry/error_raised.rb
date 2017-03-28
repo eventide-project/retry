@@ -10,7 +10,7 @@ context "Error Raised" do
         fail if i == 0
       end
 
-      test "Action is retried" do
+      test "Retried once (action was executed twice)" do
         assert(count == 2)
       end
     end
