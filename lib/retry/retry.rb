@@ -16,8 +16,16 @@ class Retry
   attr_writer :action_executed
 
   def self.build(*errors, millisecond_intervals: nil)
+    errors = errors.flatten
     instance = new(errors)
     instance.millisecond_intervals = millisecond_intervals&.to_enum
+    instance
+  end
+
+  def self.configure(receiver, *errors, millisecond_intervals: nil, attr_name: nil)
+    attr_name ||= :rtry
+    instance = build(errors, millisecond_intervals: millisecond_intervals)
+    receiver.public_send("#{attr_name}=", instance)
     instance
   end
 
