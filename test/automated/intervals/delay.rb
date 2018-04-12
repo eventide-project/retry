@@ -12,7 +12,7 @@ context "Intervals" do
     tolerance = 100..110
 
     test "Delays for the duration of the interval" do
-      assert(tolerance.include? elapsed)
+      assert(tolerance.include?(elapsed))
     end
   end
 end
