@@ -2,16 +2,14 @@ require_relative '../automated_init'
 
 context "Telemetry" do
   context "Retried" do
-    rtry = Retry.new([])
+    rtry = Retry.new
 
     millisecond_intervals = [1, 11]
     errors = [Retry::Controls::ErrorA, Retry::Controls::ErrorB]
 
-    rtry.millisecond_intervals = millisecond_intervals.to_enum
-
     sink = Retry.register_telemetry_sink(rtry)
 
-    rtry.() do |i|
+    rtry.(errors, millisecond_intervals: millisecond_intervals) do |i|
       raise errors[i] if i == 0
       raise errors[i] if i == 1
     end
