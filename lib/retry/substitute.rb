@@ -1,12 +1,14 @@
 class Retry
   module Substitute
     def self.build
-      Retry.new()
+      instance = Retry.new()
+      sink = Retry.register_telemetry_sink(instance)
+      instance.sink = sink
+      instance
     end
 
-    class Retry #< ::Retry
-      ## telemetry
-      ## retries: count
+    class Retry < ::Retry
+      attr_accessor :sink
     end
   end
 end
