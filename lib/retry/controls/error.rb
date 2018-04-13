@@ -1,6 +1,6 @@
 class Retry
   module Controls
-    ErrorA = Try::Controls::ErrorA
-    ErrorB = Try::Controls::ErrorB
+    ErrorA = Class.new(RuntimeError)
+    ErrorB = Class.new(RuntimeError)
   end
 end

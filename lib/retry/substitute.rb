@@ -1,10 +1,12 @@
 class Retry
   module Substitute
     def self.build
-      Retry.new
+      Retry.new()
     end
 
     class Retry
+      ## telemetry
+      ## retries: count
     end
   end
 end

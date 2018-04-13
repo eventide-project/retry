@@ -1,4 +1,7 @@
 class Retry
+  include ::Telemetry::Dependency
+  extend Retry::Telemetry::Register
+
   initializer :errors
 
   def millisecond_intervals
@@ -52,6 +55,9 @@ class Retry
       retries += 1
 
       interval = millisecond_intervals.next
+
+      telemetry.record :retried, Retry::Telemetry::Data.new(retries, error.class, interval)
+
       break if interval.nil?
 
       sleep (interval/1000.0)
