@@ -4,7 +4,7 @@ class Retry
       Retry.new()
     end
 
-    class Retry
+    class Retry #< ::Retry
       ## telemetry
       ## retries: count
     end

@@ -1,8 +1,12 @@
-require_relative 'automated_init'
+require_relative '../automated_init'
 
-context "Telemetry" do
-  context "Retried" do
-    rtry = Retry.new([])
+context "Substitute" do
+  context "Telemetry" do
+    receiver = Retry::Controls::Dependency.example
+
+    # rtry = Retry.new([])
+
+    rtry = receiver.rtry
 
     millisecond_intervals = [1, 11]
     errors = [Retry::Controls::ErrorA, Retry::Controls::ErrorB]

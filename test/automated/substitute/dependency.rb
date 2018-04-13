@@ -1,7 +1,7 @@
 require_relative '../automated_init'
 
-context "Dependency" do
-  context "Substitute" do
+context "Substitute" do
+  context "Dependency" do
     receiver = Retry::Controls::Dependency.example
 
     test "Is a specialized implementation" do
