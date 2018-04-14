@@ -3,7 +3,7 @@ class Retry
     class Sink
       include ::Telemetry::Sink
 
-      record :retried
+      record :tried
     end
 
     Data = Struct.new :cycle, :error, :millisecond_interval

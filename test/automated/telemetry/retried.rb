@@ -21,7 +21,7 @@ context "Telemetry" do
     end
 
     millisecond_intervals.each_with_index do |millisecond_interval, i|
-      telemetry_data = sink.retried_records[i].data
+      telemetry_data = sink.tried_records[i].data
 
       context "Cycles" do
         test "cycle [#{telemetry_data.cycle}]" do
