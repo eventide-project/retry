@@ -14,14 +14,12 @@ context "Telemetry" do
       raise errors[i] if i == 1 # Second attempt (first retry)
     end
 
-    pp sink.records.collect { |r| r.data }
-
     test "2 retries" do
-      assert(sink.records.length == 2)
+      assert(sink.records.length == 3)
     end
 
     millisecond_intervals.each_with_index do |millisecond_interval, i|
-      telemetry_data = sink.tried_records[i].data
+      telemetry_data = sink.records[i].data
 
       context "Cycles" do
         test "cycle [#{telemetry_data.cycle}]" do

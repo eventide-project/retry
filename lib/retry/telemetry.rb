@@ -3,10 +3,14 @@ class Retry
     class Sink
       include ::Telemetry::Sink
 
-      record :tried
+      record :failed
+      record :succeeded
     end
 
-    Data = Struct.new :cycle, :error, :millisecond_interval
+    module Data
+      Failed = Struct.new :cycle, :error, :millisecond_interval
+      Succeeded = Struct.new :cycle
+    end
 
     def self.sink
       Sink.new

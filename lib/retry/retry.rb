@@ -32,7 +32,7 @@ class Retry
     errors = errors.flatten
     millisecond_intervals ||= [0]
 
-    logger.trace { "Starting retry (Errors: #{errors.empty? ? '<none>' : errors.join(', ').inspect}, Millisecond Intervals: #{millisecond_intervals.join(', ')})" }
+    logger.trace { "Starting retry (Errors: #{errors.empty? ? '<none>' : errors.join(', ')}, Millisecond Intervals: #{millisecond_intervals.join(', ')})" }
 
     intervals = millisecond_intervals.to_enum
 
@@ -56,7 +56,7 @@ class Retry
       interval = intervals.next
 
       logger.debug { "Attempt failed (Cycle: #{cycle}, Error: #{error.class.name})" }
-      telemetry.record :tried, Retry::Telemetry::Data.new(cycle, error.class, interval)
+      telemetry.record :failed, Retry::Telemetry::Data::Failed.new(cycle, error.class, interval)
 
       if interval.nil?
         logger.debug { "No more attempts. Intervals depleted." }
@@ -75,6 +75,7 @@ class Retry
     end
 
     logger.info { "Attempt succeeded (Cycle: #{cycle})" }
+    telemetry.record :succeeded, Retry::Telemetry::Data::Succeeded.new(cycle)
 
     cycle
   end
