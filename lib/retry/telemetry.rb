@@ -6,7 +6,7 @@ class Retry
       record :retried
     end
 
-    Data = Struct.new :retry, :error, :millisecond_interval
+    Data = Struct.new :cycle, :error, :millisecond_interval
 
     def self.sink
       Sink.new
