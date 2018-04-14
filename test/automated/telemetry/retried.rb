@@ -14,7 +14,7 @@ context "Telemetry" do
       raise errors[i] if i == 1 # Second attempt (first retry)
     end
 
-    # pp sink.records.collect { |r| r.data }
+    pp sink.records.collect { |r| r.data }
 
     test "2 retries" do
       assert(sink.records.length == 2)
