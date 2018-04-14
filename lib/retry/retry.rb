@@ -50,7 +50,6 @@ class Retry
       action_executed&.call(cycle)
 
       if success
-        logger.debug { "Attempt succeed (Cycle: #{cycle})" }
         break
       end
 
@@ -71,7 +70,7 @@ class Retry
     end
 
     unless error.nil?
-      logger.debug { "All attempts failed. Will not retry. (Cycle: #{cycle}, Error: #{error.class.name})" }
+      logger.info { "All attempts failed. Will not retry. Raising error: #{error.class.name}. (Cycle: #{cycle})" }
       raise error
     end
 
