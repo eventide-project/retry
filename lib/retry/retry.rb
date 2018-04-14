@@ -70,7 +70,7 @@ class Retry
     end
 
     unless error.nil?
-      logger.info { "All attempts failed. Will not retry. Raising error: #{error.class.name}. (Cycle: #{cycle})" }
+      logger.info { "Attempts failed. Will not retry. Raising error: #{error.class.name}. (Cycle: #{cycle})" }
       raise error
     end
 
