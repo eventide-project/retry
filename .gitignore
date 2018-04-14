@@ -7,3 +7,4 @@ gems
 materials
 *.gem
 *notes.*
+log.txt
