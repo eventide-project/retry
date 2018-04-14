@@ -1,4 +1,5 @@
 class Retry
+  include Log::Dependency
   include ::Telemetry::Dependency
   extend Retry::Telemetry::Register
 
@@ -12,7 +13,7 @@ class Retry
   attr_writer :action_executed
 
   def self.build
-    new
+    instance = new
   end
 
   def self.configure(receiver, attr_name: nil)
@@ -31,37 +32,51 @@ class Retry
     errors = errors.flatten
     millisecond_intervals ||= [0]
 
+    logger.trace { "Starting retry (Errors: #{errors.join(', ')}, Millisecond Intervals: #{millisecond_intervals.join(', ')})" }
+
     intervals = millisecond_intervals.to_enum
 
-    retries = 0
+    cycle = 0
 
     error = nil
     probe = proc { |e| error = e }
 
     loop do
       success = Try.(errors, error_probe: probe) do
-        action.call(retries)
+        logger.debug { "Attempting (Cycle: #{cycle})" }
+        action.call(cycle)
       end
 
-      action_executed&.call(retries)
+      action_executed&.call(cycle)
 
-      break if success
-
-      retries += 1
+      if success
+        logger.debug { "Attempt succeed (Cycle: #{cycle})" }
+        break
+      end
 
       interval = intervals.next
 
-      telemetry.record :retried, Retry::Telemetry::Data.new(retries, error.class, interval)
+      logger.debug { "Attempt failed (Cycle: #{cycle}, Error: #{error.class.name})" }
+      telemetry.record :retried, Retry::Telemetry::Data.new(cycle, error.class, interval)
 
-      break if interval.nil?
+      if interval.nil?
+        logger.debug { "No more attempts. Intervals depleted." }
+        break
+      end
 
+      logger.debug { "Will retry. Sleeping #{interval} milliseconds before next attempt." }
       sleep (interval/1000.0)
+
+      cycle += 1
     end
 
     unless error.nil?
+      logger.debug { "All attempts failed. Will not retry. (Cycle: #{cycle}, Error: #{error.class.name})" }
       raise error
     end
 
-    retries
+    logger.info { "Attempt succeeded (Cycle: #{cycle})" }
+
+    cycle
   end
 end

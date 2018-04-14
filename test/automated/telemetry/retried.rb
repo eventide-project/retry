@@ -4,28 +4,28 @@ context "Telemetry" do
   context "Retried" do
     rtry = Retry.new
 
-    millisecond_intervals = [1, 11]
+    millisecond_intervals = [11, 111]
     errors = [Retry::Controls::ErrorA, Retry::Controls::ErrorB]
 
     sink = Retry.register_telemetry_sink(rtry)
 
     rtry.(errors, millisecond_intervals: millisecond_intervals) do |i|
-      raise errors[i] if i == 0
-      raise errors[i] if i == 1
+      raise errors[i] if i == 0 # First attempt
+      raise errors[i] if i == 1 # Second attempt (first retry)
     end
+
+    # pp sink.records.collect { |r| r.data }
 
     test "2 retries" do
       assert(sink.records.length == 2)
     end
 
-    telemetry_data = sink.retried_records.first.data
-
     millisecond_intervals.each_with_index do |millisecond_interval, i|
       telemetry_data = sink.retried_records[i].data
 
-      context "retries" do
-        test "retry [#{telemetry_data.retry}]" do
-          assert(telemetry_data.retry == i + 1)
+      context "Cycles" do
+        test "cycle [#{telemetry_data.cycle}]" do
+          assert(telemetry_data.cycle == i)
         end
 
         test "error [#{telemetry_data.error}]" do
