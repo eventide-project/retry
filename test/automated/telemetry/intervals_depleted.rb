@@ -1,26 +1,32 @@
 require_relative '../automated_init'
 
 context "Telemetry" do
-  context "Retried" do
+  context "Intervals Depleted" do
     rtry = Retry.new
 
-    millisecond_intervals = [11, 111]
+    millisecond_intervals = [11]
     errors = [Retry::Controls::ErrorA, Retry::Controls::ErrorB]
 
     sink = Retry.register_telemetry_sink(rtry)
 
-    rtry.(errors, millisecond_intervals: millisecond_intervals) do |i|
-      raise errors[i] if i == 0 # First attempt
-      raise errors[i] if i == 1 # Second attempt (first retry)
+    test "Last error is raised" do
+      assert proc {
+        rtry.(errors, millisecond_intervals: millisecond_intervals) do |i|
+          raise errors[i] if i == 0 # First attempt
+          raise errors[i] if i == 1 # Second attempt (first retry, gets raised)
+        end
+      } do
+        raises_error? Retry::Controls::ErrorB
+      end
     end
 
-    test "3 cycles" do
-      assert(sink.records.length == 3)
+    test "2 cycles" do
+      assert(sink.records.length == 2)
     end
 
     context "Cycles" do
       context "Failed" do
-        millisecond_intervals.each_with_index do |millisecond_interval, i|
+        2.times do |i|
           telemetry_data = sink.records[i].data
 
           test "cycle [#{telemetry_data.cycle}]" do
@@ -34,14 +40,6 @@ context "Telemetry" do
           test "millisecond_interval [#{telemetry_data.millisecond_interval}]" do
             assert(telemetry_data.millisecond_interval == millisecond_intervals[i])
           end
-        end
-      end
-
-      context "Succeeded" do
-        telemetry_data = sink.records.last.data
-
-        test "cycle [#{telemetry_data.cycle}]" do
-          assert(telemetry_data.cycle == 2)
         end
       end
     end

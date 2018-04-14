@@ -50,10 +50,12 @@ class Retry
       action_executed&.call(cycle)
 
       if success
+        logger.info { "Attempt succeeded (Cycle: #{cycle})" }
+        telemetry.record :succeeded, Retry::Telemetry::Data::Succeeded.new(cycle)
         break
       end
 
-      interval = intervals.next
+      interval = intervals.next rescue nil
 
       logger.debug { "Attempt failed (Cycle: #{cycle}, Error: #{error.class.name})" }
       telemetry.record :failed, Retry::Telemetry::Data::Failed.new(cycle, error.class, interval)
@@ -73,9 +75,6 @@ class Retry
       logger.info { "Attempts failed. Will not retry. Raising error: #{error.class.name}. (Cycle: #{cycle})" }
       raise error
     end
-
-    logger.info { "Attempt succeeded (Cycle: #{cycle})" }
-    telemetry.record :succeeded, Retry::Telemetry::Data::Succeeded.new(cycle)
 
     cycle
   end
