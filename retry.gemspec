@@ -2,7 +2,7 @@
 Gem::Specification.new do |s|
   s.name = 'evt-retry'
   s.version = '0.2.0.2'
-  s.summary = 'Retry an execution that terminates with an error'
+  s.summary = 'Retry an execution that terminates with an error, with optional backoff cycles'
   s.description = ' '
 
   s.authors = ['The Eventide Project']
