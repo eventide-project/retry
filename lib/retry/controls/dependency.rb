@@ -6,7 +6,7 @@ class Retry
       end
 
       class Example
-        include Dependency
+        ::Dependency.activate(self)
 
         dependency :rtry, Retry
       end

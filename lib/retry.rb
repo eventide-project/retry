@@ -1,6 +1,6 @@
 require 'try'
 require 'initializer'
-require 'dependency'; Dependency.activate
+require 'dependency'
 require 'telemetry'
 require 'log'
 
