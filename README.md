@@ -4,7 +4,7 @@ Retry an execution that terminates with an error
 
 ## Examples
 
-### Basics
+### Retry on Any Error
 
 ``` ruby
 tries = 0
@@ -23,7 +23,7 @@ puts tries
 # => 2
 ```
 
-### Specific Error
+### Retry on Specific Error
 ``` ruby
 tries = 0
 raise_error = true
@@ -42,15 +42,46 @@ Retry.(SomeError) do
   # Will raise RuntimeError after two tries
   raise RuntimeError
 end
+
+# => 1
+# => 2
+# => RuntimeError
 ```
 
-### Backoff
+### Retry on Multiple Specific Errors
+``` ruby
+tries = 0
+raise_error = true
+
+SomeError = Class.new(RuntimeError)
+SomeOtherError = Class.new(RuntimeError)
+
+Retry.(SomeError, SomeOtherError) do
+  tries += 1
+  puts tries
+
+  if raise_error
+    raise_error = false
+    raise SomeOtherError
+  end
+
+  # Will raise RuntimeError after two tries
+  raise RuntimeError
+end
+
+# => 1
+# => 2
+# => RuntimeError
+```
+
+### Retry and Back Off
 ``` ruby
 tries = 0
 
 SomeError = Class.new(RuntimeError)
+SomeOtherError = Class.new(RuntimeError)
 
-Retry.(SomeError, millisecond_intervals: [100, 200]) do
+Retry.(SomeError, SomeOtherError, millisecond_intervals: [100, 200]) do
   tries += 1
   puts tries
 
