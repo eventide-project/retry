@@ -2,10 +2,11 @@
 
 Retry an execution that terminates with an error
 
-## Example
+## Examples
+
+### Basics
 
 ``` ruby
-## Basics
 tries = 0
 raise_error = true
 
@@ -20,9 +21,10 @@ end
 
 puts tries
 # => 2
+```
 
-
-## Specific Error
+### Specific Error
+``` ruby
 tries = 0
 raise_error = true
 
@@ -40,9 +42,10 @@ Retry.(SomeError) do
   # Will raise RuntimeError after two tries
   raise RuntimeError
 end
+```
 
-
-## Backoff
+### Backoff
+``` ruby
 tries = 0
 
 SomeError = Class.new(RuntimeError)
