@@ -96,4 +96,4 @@ end
 
 ## License
 
-The `retry` library is released under the [MIT License](https://github.com/retry/blob/master/MIT-License.txt).
+The `retry` library is released under the [MIT License](https://github.com/eventide-project/retry/blob/master/MIT-License.txt).
