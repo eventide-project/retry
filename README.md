@@ -23,7 +23,7 @@ puts tries
 # => 2
 ```
 
-### Retry on Specific Error
+### Retry on a Specific Error
 ``` ruby
 tries = 0
 raise_error = true
