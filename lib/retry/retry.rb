@@ -32,7 +32,7 @@ class Retry
     errors = errors.flatten
     millisecond_intervals ||= [0]
 
-    logger.trace { "Starting retry (Errors: #{errors.empty? ? '<none>' : errors.join(', ')}, Millisecond Intervals: #{millisecond_intervals.join(', ')})" }
+    logger.trace { "Starting retry (Errors: #{errors.empty? ? '(none)' : errors.join(', ')}, Millisecond Intervals: #{millisecond_intervals.join(', ')})" }
 
     intervals = millisecond_intervals.to_enum
 
