@@ -6,6 +6,8 @@ Retry an execution that terminates with an error
 
 ### Retry on Any Error
 
+Any error will cause the block to retry. The block will only retry once.
+
 ``` ruby
 tries = 0
 raise_error = true
@@ -27,6 +29,8 @@ puts tries
 ```
 
 ### Retry on a Specific Error
+
+The block will be retried only if the specified error is raised in the block.
 
 ``` ruby
 tries = 0
@@ -58,6 +62,8 @@ end
 
 ### Retry on Multiple Specific Errors
 
+The block will be retried if any of the the specified errors are raised in the block.
+
 ``` ruby
 tries = 0
 raise_error = true
@@ -88,6 +94,10 @@ end
 ```
 
 ### Retry and Back Off
+
+The block will be retried up to the number of delay intervals specified.
+
+The `millisecond_intervals` parameter can be used without specifying a specific error, when specifying a specific error, or when specifying a list of possible errors.
 
 ``` ruby
 tries = 0
