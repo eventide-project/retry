@@ -15,7 +15,7 @@ Retry.() do
 
   # The raise_error variable is true during the first iteration
   # RuntimeError will be raised during the first iteration
-  # and the block will be executed once again
+  # The block will be executed once again without raising an error
   if raise_error
     raise_error = false
     raise RuntimeError
