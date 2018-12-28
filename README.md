@@ -2,6 +2,16 @@
 
 Retry an execution that terminates with an error
 
+## Overview
+
+The `Retry` library provides basic retry functionality with a clear and simple API. It supports:
+
+- Retrying on any error
+- Retrying on a specific error
+- Retrying based on a list of possible errors
+- Retrying once or many times
+- Backoff intervals that allow delaying between retries
+
 ## Examples
 
 ### Retry on Any Error
