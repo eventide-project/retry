@@ -38,7 +38,7 @@ puts tries
 
 ### Retry on a Specific Error
 
-The block will be retried only if the specified error is raised in the block.
+The block will be retried only if the specified error is raised in the block. The block will only retry once.
 
 ``` ruby
 SomeError = Class.new(RuntimeError)
@@ -69,7 +69,7 @@ end
 
 ### Retry on Multiple Specific Errors
 
-The block will be retried if any of the the specified errors are raised in the block.
+The block will be retried if any of the the specified errors are raised in the block. The block will only retry once.
 
 ``` ruby
 SomeError = Class.new(RuntimeError)
@@ -101,9 +101,9 @@ end
 
 ### Retry and Back Off
 
-The block will be retried up to the number of delay intervals specified.
-
 The `millisecond_intervals` parameter can be used without specifying a specific error, when specifying a specific error, or when specifying a list of possible errors.
+
+The block will be retried up to the number of delay intervals specified.
 
 ``` ruby
 SomeError = Class.new(RuntimeError)
