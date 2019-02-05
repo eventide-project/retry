@@ -55,13 +55,16 @@ class Retry
         break
       end
 
-      interval = intervals.next rescue nil
+      interval = nil
+      Try.(StopIteration) do
+        interval = intervals.next
+      end
 
       logger.debug { "Attempt failed (Cycle: #{cycle}, Error: #{error.class.name})" }
       telemetry.record :failed, Retry::Telemetry::Data::Failed.new(cycle, error.class, interval)
 
       if interval.nil?
-        logger.debug { "No more attempts. Intervals depleted." }
+        logger.debug { 'No more attempts. Intervals depleted.' }
         break
       end
 
