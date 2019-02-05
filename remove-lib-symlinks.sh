@@ -1,3 +1,3 @@
 source ./library-symlinks.sh
 
-remove_lib_symlinks 'log'
+remove_lib_symlinks 'retry'
