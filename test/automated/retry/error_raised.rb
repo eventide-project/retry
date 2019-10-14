@@ -28,8 +28,8 @@ context "Error Raised" do
 
   context "Error Recurs" do
     test "Error is raised" do
-      assert proc { Retry.() { fail } } do
-        raises_error? RuntimeError
+      assert_raises RuntimeError do
+        Retry.() { fail }
       end
     end
   end

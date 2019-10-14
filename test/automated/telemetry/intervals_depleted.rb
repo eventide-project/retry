@@ -10,13 +10,11 @@ context "Telemetry" do
     sink = Retry.register_telemetry_sink(rtry)
 
     test "Last error is raised" do
-      assert proc {
+      assert_raises Retry::Controls::ErrorB do
         rtry.(errors, millisecond_intervals: millisecond_intervals) do |i|
           raise errors[i] if i == 0 # First attempt
           raise errors[i] if i == 1 # Second attempt (first retry, gets raised)
         end
-      } do
-        raises_error? Retry::Controls::ErrorB
       end
     end
 
