@@ -28,7 +28,7 @@ context "Error Raised" do
 
   context "Error Recurs" do
     test "Error is raised" do
-      assert_raises RuntimeError do
+      assert_raises(RuntimeError) do
         Retry.() { fail }
       end
     end

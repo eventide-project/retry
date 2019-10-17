@@ -22,7 +22,7 @@ context "Specific Error" do
 
     context "Other Error Raised" do
       test "Error is re-raised" do
-        assert_raises RuntimeError do
+        assert_raises(RuntimeError) do
           Retry.(ErrorA) do |i|
             raise RuntimeError if i == 0
           end
