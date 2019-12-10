@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 Gem::Specification.new do |s|
   s.name = 'evt-retry'
-  s.version = '1.0.0.3'
+  s.version = '2.0.0.3'
   s.summary = 'Retry an execution that terminates with an error, with optional backoff cycles'
   s.description = ' '
 
