@@ -5,15 +5,15 @@ context "Telemetry" do
     rtry = Retry.new
 
     millisecond_intervals = [11]
-    errors = [Retry::Controls::ErrorA, Retry::Controls::ErrorB]
+    error_classes = [Retry::Controls::ErrorA, Retry::Controls::ErrorB]
 
     sink = Retry.register_telemetry_sink(rtry)
 
     test "Last error is raised" do
       assert_raises(Retry::Controls::ErrorB) do
-        rtry.(errors, millisecond_intervals: millisecond_intervals) do |i|
-          raise errors[i] if i == 0 # First attempt
-          raise errors[i] if i == 1 # Second attempt (first retry, gets raised)
+        rtry.(error_classes, millisecond_intervals: millisecond_intervals) do |i|
+          raise error_classes[i] if i == 0 # First attempt
+          raise error_classes[i] if i == 1 # Second attempt (first retry, gets raised)
         end
       end
     end
@@ -32,7 +32,7 @@ context "Telemetry" do
           end
 
           test "error [#{telemetry_data.error}]" do
-            assert(telemetry_data.error == errors[i])
+            assert(telemetry_data.error.instance_of?(error_classes[i]))
           end
 
           test "millisecond_interval [#{telemetry_data.millisecond_interval}]" do

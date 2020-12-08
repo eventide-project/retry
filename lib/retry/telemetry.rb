@@ -8,7 +8,12 @@ class Retry
     end
 
     module Data
-      Failed = Struct.new :cycle, :error, :millisecond_interval
+      Failed = Struct.new :cycle, :error, :millisecond_interval do
+        def error_class
+          error.class
+        end
+      end
+
       Succeeded = Struct.new :cycle
     end
 

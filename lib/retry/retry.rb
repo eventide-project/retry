@@ -61,7 +61,7 @@ class Retry
       end
 
       logger.debug { "Attempt failed (Cycle: #{cycle}, Error: #{error.class.name})" }
-      telemetry.record :failed, Retry::Telemetry::Data::Failed.new(cycle, error.class, interval)
+      telemetry.record :failed, Retry::Telemetry::Data::Failed.new(cycle, error, interval)
 
       if interval.nil?
         logger.debug { 'No more attempts. Intervals depleted.' }
