@@ -2,20 +2,14 @@ require_relative '../automated_init'
 
 context "Error not raised" do
   context do
-    count = 0
+    cycles = 0
 
-    Retry.() { count += 1 }
+    Retry.() do
+      cycles += 1
+    end
 
     test "Action is executed once" do
-      assert(count == 1)
-    end
-  end
-
-  context "Count of Retries" do
-    retries = Retry.() { }
-
-    test "0" do
-      assert(retries == 0)
+      assert(cycles == 1)
     end
   end
 end

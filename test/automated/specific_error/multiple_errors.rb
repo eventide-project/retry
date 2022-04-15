@@ -3,21 +3,26 @@ require_relative '../automated_init'
 context "Specific Error" do
   context "Multiple Errors" do
     context "Not raised" do
-      retries = Retry.(ErrorA, ErrorB) { }
+      cycles = 0
+      Retry.(ErrorA, ErrorB) do
+        cycles += 1
+      end
 
       test "Action is not retried" do
-        assert(retries == 0)
+        assert(cycles == 1)
       end
     end
 
     [ErrorA, ErrorB].each do |error_class|
       context "Specific Error Raised (#{error_class.name.split('::').last})" do
-        retries = Retry.(ErrorA, ErrorB) do |i|
+        cycles = 0
+        Retry.(ErrorA, ErrorB) do |i|
+          cycles += 1
           raise error_class if i == 0
         end
 
         test "Action is retried" do
-          assert(retries == 1)
+          assert(cycles == 2)
         end
       end
     end
@@ -32,17 +37,17 @@ context "Specific Error" do
       end
 
       test "Action is not retried" do
-        count = 0
+        cycles = 0
 
         begin
           Retry.(ErrorA, ErrorB) do |i|
-            count += 1
+            cycles += 1
             raise RuntimeError if i == 0
           end
         rescue
         end
 
-        assert(count == 1)
+        assert(cycles == 1)
       end
     end
   end
