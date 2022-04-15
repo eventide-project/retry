@@ -1,12 +1,12 @@
 require_relative 'automated_init'
 
 context "Action Executed" do
-  count = 0
+  cycles = 0
 
   rtry = Retry.build()
 
   rtry.action_executed do
-    count += 1
+    cycles += 1
   end
 
   rtry.() do |i|
@@ -14,6 +14,6 @@ context "Action Executed" do
   end
 
   test "Block is executed once for each execution of the action" do
-    assert(count == 2)
+    assert(cycles == 2)
   end
 end

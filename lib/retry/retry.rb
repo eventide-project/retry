@@ -13,7 +13,7 @@ class Retry
   attr_writer :action_executed
 
   def self.build
-    instance = new
+    new
   end
 
   def self.configure(receiver, attr_name: nil)
@@ -40,11 +40,12 @@ class Retry
 
     error = nil
     probe = proc { |e| error = e }
+    result = nil
 
     loop do
       success = Try.(errors, error_probe: probe) do
         logger.debug { "Attempting (Cycle: #{cycle})" }
-        action.call(cycle)
+        result = action.call(cycle)
       end
 
       action_executed&.call(cycle)
@@ -79,6 +80,6 @@ class Retry
       raise error
     end
 
-    cycle
+    result
   end
 end

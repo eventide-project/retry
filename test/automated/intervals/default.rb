@@ -3,18 +3,18 @@ require_relative '../automated_init'
 context "Intervals" do
   context "Default" do
     context do
-      count = 0
+      cycles = 0
 
       begin
         Retry.() do |i|
-          count += 1
+          cycles += 1
           fail
         end
       rescue
       end
 
       test "Retried once (action was executed twice)" do
-        assert(count == 2)
+        assert(cycles == 2)
       end
     end
 
